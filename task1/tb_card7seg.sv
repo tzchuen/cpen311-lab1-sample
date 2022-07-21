@@ -1,10 +1,10 @@
+`timescale  1ps/1ps
 module tb_card7seg();
-    reg err;
-    reg [3:0] TB_SW;
-    wire [6:0] TB_HEX0;
+    logic[3:0] TB_SW;
+    logic[6:0] TB_HEX0;
 
     // Card value assignments
-    `define NUM_ZERO    4'b0000
+    `define NUM_ZERO    4'b0000     
     `define NUM_ACE     4'b0001
     `define NUM_2       4'b0010
     `define NUM_3       4'b0011
@@ -21,7 +21,23 @@ module tb_card7seg();
     `define NUM_14      4'b1110
     `define NUM_15      4'b1111
 
+    /*
+     * Active LOW
+     *
+     *    00000000
+     *   5        1
+     *   5        1
+     *   5        1
+     *    66666666         
+     *   4        2
+     *   4        2
+     *   4        2
+     *    33333333
+     */
+
+
     // HEX display output assignments
+                          // 6543210
     `define HEX_BLANK     7'b1111111
     `define HEX_ACE       7'b0001000
     `define HEX_2         7'b0100100
@@ -37,120 +53,92 @@ module tb_card7seg();
     `define HEX_QUEEN     7'b0011000
     `define HEX_KING      7'b0001001
 
+    card7seg DUT( TB_SW, TB_HEX0 );
 
-    card7seg dut( TB_SW, TB_HEX0 );
-
-    /* Automated testbench checker 
-       modified from Zhi Chuen Tan's 
-       CPEN 211 Lab 4 submission
-       for the 2018W1 term.
-    */
-    task tb_checker;
-        input [6:0] expected_hex0;
-        begin
-            if( tb_card7seg.dut.HEX0 !== expected_hex0 ) begin
-                $display( "ERROR: Output should be %b,  not %b",
-                expected_hex0, tb_card7seg.dut.HEX0 );
-            
-                err = 1'b1;
-            end
-        end
-    endtask
-
-    // Testbench tests each number from 0-15
     initial begin
-        // Initialized err
-        err = 1'b0;
-
-        $display( "Checking blank (0)" );
         TB_SW = `NUM_ZERO;
         #10;
-        tb_checker( `HEX_BLANK );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_BLANK ) $display("Blank (0) OK");
+            else $error("FAIL: Blank (0)");
 
-        $display( "Checking blank (14)" );
         TB_SW = `NUM_14;
         #10;
-        tb_checker( `HEX_BLANK );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_BLANK ) $display("14 OK");
+            else $error("FAIL: Blank (14)"); 
 
-        $display( "Checking blank (15)" );
         TB_SW = `NUM_15;
         #10;
-        tb_checker( `HEX_BLANK );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_BLANK ) $display("15 OK"); 
+            else $error("FAIL: Blank (15)");
+        
 
-        $display( "Checking ace " );
         TB_SW = `NUM_ACE;
         #10;
-        tb_checker( `HEX_ACE );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_ACE ) $display("A OK"); 
+            else $error("FAIL: A");
 
-        $display( "Checking 2" );
         TB_SW = `NUM_2;
         #10;
-        tb_checker( `HEX_2 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_2 ) $display("2 OK"); 
+            else $error("FAIL: 2");
 
-        $display( "Checking 3" );
         TB_SW = `NUM_3;
         #10;
-        tb_checker( `HEX_3 );
-
-        $display( "Checking 4" );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_3 ) $display("3 OK"); 
+            else $error("FAIL: 3");
+        
         TB_SW = `NUM_4;
         #10;
-        tb_checker( `HEX_4 );
-
-        $display( "Checking 5" );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_4 ) $display("4 OK"); 
+            else $error("FAIL: A");
+        
         TB_SW = `NUM_5;
         #10;
-        tb_checker( `HEX_5 );
-
-        $display( "Checking 6" );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_5 ) $display("5 OK"); 
+            else $error("FAIL: 5");
+ 
         TB_SW = `NUM_6;
         #10;
-        tb_checker( `HEX_6 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_6 ) $display("6 OK"); 
+            else $error("FAIL: 6");
 
-        $display( "Checking 7" );
         TB_SW = `NUM_7;
         #10;
-        tb_checker( `HEX_7 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_7 ) $display("7 OK"); 
+            else $error("FAIL: 7");
 
-        $display( "Checking 8" );
         TB_SW = `NUM_8;
         #10;
-        tb_checker( `HEX_8 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_8 ) $display("8 OK"); 
+            else $error("FAIL: 8");
 
-        $display( "Checking 9" );
         TB_SW = `NUM_9;
         #10;
-        tb_checker( `HEX_9 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_9 ) $display("9 OK"); 
+            else $error("FAIL: 9");
 
-        $display( "Checking 10" );
         TB_SW = `NUM_10;
         #10;
-        tb_checker( `HEX_10 );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_10 ) $display("10 OK"); 
+            else $error("FAIL: 5");
 
-        $display( "Checking Jack" );
         TB_SW = `NUM_JACK;
         #10;
-        tb_checker( `HEX_JACK );
-
-        $display( "Checking Queen" );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_JACK ) $display("J OK"); 
+            else $error("FAIL: J");
+        
         TB_SW = `NUM_QUEEN;
         #10;
-        tb_checker( `HEX_QUEEN );
-
-        $display( "Checking King" );
+        assert (tb_card7seg.DUT.HEX0 == `HEX_QUEEN ) $display("Q OK"); 
+            else $error("FAIL: Q");
+        
         TB_SW = `NUM_KING;
         #10;
-        tb_checker( `HEX_KING );
-
-
-        // Checks if there are any errors
-        if ( ~err )
-            $display( "All tests passed!" );
-
-        else
-            $display( "Errors detected!" );
-
-
-    end						
+        assert (tb_card7seg.DUT.HEX0 == `HEX_KING ) $display("K OK"); 
+            else $error("FAIL: K");
+        
+    end
+	
+   // $stop;
 endmodule
 
